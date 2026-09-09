@@ -1,4 +1,4 @@
-import { HomeEntity } from "@/modules/home/domain/home.entity";
+import { HomeEntity, HomeLayoutBlock } from "@/modules/home/domain/home.entity";
 import { SiteHeader } from "../components/SiteHeader";
 import { SiteFooter } from "../components/SiteFooter";
 import { HeroSection } from "../components/HeroSection";
@@ -17,6 +17,30 @@ interface LegacyHomePageProps {
 }
 
 export const LegacyHomePage = ({ data }: LegacyHomePageProps) => {
+  const defaultLayout: HomeLayoutBlock[] = [
+    { blockType: 'hero' as const, data: data.hero }, { blockType: 'experience' as const, data: data.experience },
+    { blockType: 'account' as const, data: data.account }, { blockType: 'steps' as const, data: data.steps },
+    { blockType: 'promo' as const, data: data.promo }, { blockType: 'security' as const, data: data.security },
+    { blockType: 'learn' as const, data: data.learn }, { blockType: 'newsletter' as const, data: data.newsletter },
+    { blockType: 'faq' as const, data: data.faq }, { blockType: 'footer' as const, data: data.footer },
+  ];
+  const layout = data.layout?.length ? data.layout : defaultLayout;
+  const renderBlock = (block: (typeof layout)[number], index: number) => {
+    const key = block.id ?? `${block.blockType}-${index}`;
+    switch (block.blockType) {
+      case 'hero': return <HeroSection key={key} data={block.data} />;
+      case 'experience': return <ExperienceSection key={key} data={block.data} />;
+      case 'account': return <AccountSection key={key} data={block.data} />;
+      case 'steps': return <StepsSection key={key} data={block.data} />;
+      case 'promo': return <PromoSection key={key} data={block.data} />;
+      case 'security': return <SecuritySection key={key} data={block.data} />;
+      case 'learn': return <LearnSection key={key} data={block.data} />;
+      case 'newsletter': return <NewsletterSection key={key} data={block.data} />;
+      case 'faq': return <FaqSection key={key} data={block.data} />;
+      case 'footer': return <SiteFooter key={key} data={block.data} />;
+    }
+  };
+
   return (
     <>
       <SiteHeader />
@@ -24,59 +48,11 @@ export const LegacyHomePage = ({ data }: LegacyHomePageProps) => {
         <div data-elementor-type="wp-page" data-elementor-id="17" className="elementor elementor-17">
           <div className="elementor-element elementor-element-040086b5 e-con-full bradesco-elementor-root e-flex e-con e-parent" data-id="040086b5" data-element_type="container" data-e-type="container">
             
-            <div className="elementor-element elementor-element-87dab595 bradesco-section-widget bradesco-section-1 elementor-widget elementor-widget-bradesco-editable-section">
-              <div className="elementor-widget-container">
-                <HeroSection data={data.hero} />
+            {layout.filter(block => block.blockType !== 'footer').map((block, index) => (
+              <div key={block.id ?? `${block.blockType}-${index}`} className={`bradesco-section-widget bradesco-section-${index + 1}`}>
+                <div className="elementor-widget-container">{renderBlock(block, index)}</div>
               </div>
-            </div>
-
-            <div className="elementor-element elementor-element-3fb41d74 bradesco-section-widget bradesco-section-2 elementor-widget elementor-widget-bradesco-editable-section">
-              <div className="elementor-widget-container">
-                <ExperienceSection data={data.experience} />
-              </div>
-            </div>
-
-            <div className="elementor-element elementor-element-b482d8cd bradesco-section-widget bradesco-section-3 elementor-widget elementor-widget-bradesco-editable-section">
-              <div className="elementor-widget-container">
-                <AccountSection data={data.account} />
-              </div>
-            </div>
-
-            <div className="elementor-element elementor-element-d978c3d6 bradesco-section-widget bradesco-section-4 elementor-widget elementor-widget-bradesco-editable-section">
-              <div className="elementor-widget-container">
-                <StepsSection data={data.steps} />
-              </div>
-            </div>
-
-            <div className="elementor-element elementor-element-30c69f79 bradesco-section-widget bradesco-section-5 elementor-widget elementor-widget-bradesco-editable-section">
-              <div className="elementor-widget-container">
-                <PromoSection data={data.promo} />
-              </div>
-            </div>
-
-            <div className="elementor-element elementor-element-90a09bcc bradesco-section-widget bradesco-section-6 elementor-widget elementor-widget-bradesco-editable-section">
-              <div className="elementor-widget-container">
-                <SecuritySection data={data.security} />
-              </div>
-            </div>
-
-            <div className="elementor-element elementor-element-32aef06f bradesco-section-widget bradesco-section-7 elementor-widget elementor-widget-bradesco-editable-section">
-              <div className="elementor-widget-container">
-                <LearnSection data={data.learn} />
-              </div>
-            </div>
-
-            <div className="elementor-element elementor-element-60d2411c bradesco-section-widget bradesco-section-8 elementor-widget elementor-widget-bradesco-editable-section">
-              <div className="elementor-widget-container">
-                <NewsletterSection data={data.newsletter} />
-              </div>
-            </div>
-
-            <div className="elementor-element elementor-element-2ef7be4f bradesco-section-widget bradesco-section-9 elementor-widget elementor-widget-bradesco-editable-section">
-              <div className="elementor-widget-container">
-                <FaqSection data={data.faq} />
-              </div>
-            </div>
+            ))}
 
             <div className="elementor-element elementor-element-eafb48da bradesco-section-widget bradesco-section-10 elementor-widget elementor-widget-bradesco-editable-section">
               <div className="elementor-widget-container">
@@ -87,7 +63,7 @@ export const LegacyHomePage = ({ data }: LegacyHomePageProps) => {
           </div>
         </div>
       </main>
-      <SiteFooter data={data.footer} />
+      {layout.filter(block => block.blockType === 'footer').map(renderBlock)}
     </>
   );
 };

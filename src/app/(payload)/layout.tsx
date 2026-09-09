@@ -1,9 +1,11 @@
 import type { ServerFunctionClient } from 'payload'
 import config from '@/payload.config'
 import '@payloadcms/next/css'
+import './custom-admin.css'
 import { handleServerFunctions, RootLayout } from '@payloadcms/next/layouts'
 import React from 'react'
 import { importMap } from './admin/importMap.js'
+import { ShadcnLayoutWrapper } from '@/components/payload/ShadcnLayoutWrapper'
 
 type Args = {
   children: React.ReactNode
@@ -24,7 +26,7 @@ const Layout = ({ children }: Args) => (
     importMap={importMap} 
     serverFunction={serverFunction}
   >
-    {children}
+    <ShadcnLayoutWrapper>{children}</ShadcnLayoutWrapper>
   </RootLayout>
 )
 

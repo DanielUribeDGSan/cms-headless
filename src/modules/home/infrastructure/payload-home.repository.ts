@@ -1,6 +1,6 @@
 import { getPayload } from 'payload';
 import configPromise from '@/payload.config';
-import { HomeEntity } from '../domain/home.entity';
+import { HomeEntity, HomeLayoutBlock } from '../domain/home.entity';
 import { IHomeRepository } from '../domain/home.repository';
 
 export class PayloadHomeRepository implements IHomeRepository {
@@ -12,7 +12,7 @@ export class PayloadHomeRepository implements IHomeRepository {
         slug: 'home-page',
       });
 
-      return {
+      const data: HomeEntity = {
         hero: {
           kicker: homeGlobal.heroKicker as string || '',
           title: homeGlobal.heroTitle as string || '',
@@ -79,10 +79,33 @@ export class PayloadHomeRepository implements IHomeRepository {
           })) || [],
         }
       };
+
+      const rawLayout = (homeGlobal as unknown as { layout?: Record<string, unknown>[] }).layout;
+      if (rawLayout?.length) data.layout = rawLayout.map(this.mapLayoutBlock).filter((block): block is HomeLayoutBlock => block !== null);
+      return data;
     } catch (error) {
       console.error('Error fetching home data from Payload:', error);
       // Fallback
       return this.getFallbackData();
+    }
+  }
+
+  private mapLayoutBlock = (block: Record<string, unknown>): HomeLayoutBlock | null => {
+    const text = (key: string) => typeof block[key] === 'string' ? block[key] : '';
+    const id = text('id') || undefined;
+    const items = (key: string) => Array.isArray(block[key]) ? block[key] as Record<string, unknown>[] : [];
+    switch (block.blockType) {
+      case 'hero': return { id, blockType: 'hero', data: { kicker: text('kicker'), title: text('title'), lead: text('lead'), legal: text('legal'), primaryButton: { text: text('primaryButtonText'), url: text('primaryButtonUrl') }, secondaryButton: { text: text('secondaryButtonText'), url: text('secondaryButtonUrl') } } };
+      case 'experience': return { id, blockType: 'experience', data: { title: text('title'), lead: text('lead'), features: items('features').map(item => ({ title: String(item.title ?? ''), description: String(item.description ?? ''), icon: String(item.icon ?? '') })) } };
+      case 'account': return { id, blockType: 'account', data: { title: text('title'), lead: text('lead') } };
+      case 'steps': return { id, blockType: 'steps', data: { title: text('title'), list: items('list').map(item => ({ title: String(item.title ?? ''), description: String(item.description ?? '') })) } };
+      case 'promo': return { id, blockType: 'promo', data: { title: text('title'), lead: text('lead'), button: text('button') } };
+      case 'security': return { id, blockType: 'security', data: { title: text('title'), lead: text('lead') } };
+      case 'learn': return { id, blockType: 'learn', data: { title: text('title'), lead: text('lead') } };
+      case 'newsletter': return { id, blockType: 'newsletter', data: { title: text('title'), lead: text('lead') } };
+      case 'faq': return { id, blockType: 'faq', data: { title: text('title'), list: items('list').map(item => ({ question: String(item.question ?? ''), answer: String(item.answer ?? '') })) } };
+      case 'footer': return { id, blockType: 'footer', data: { copyright: text('copyright'), links: items('links').map(item => ({ label: String(item.label ?? ''), url: String(item.url ?? '') })) } };
+      default: return null;
     }
   }
 

@@ -3,6 +3,7 @@ import { postgresAdapter } from '@payloadcms/db-postgres';
 import { lexicalEditor } from '@payloadcms/richtext-lexical';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { createLayoutFromLegacyFields, homeBlocks } from '@/modules/home/infrastructure/home-blocks';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -10,6 +11,21 @@ const dirname = path.dirname(filename);
 export default buildConfig({
   admin: {
     user: 'users',
+    meta: {
+      titleSuffix: '— Company CMS',
+    },
+    components: {
+      beforeNav: ['@/components/payload/AdminBrand#AdminBrand'],
+      graphics: {
+        Icon: '@/components/payload/AdminBrand#AdminIcon',
+        Logo: '@/components/payload/AdminBrand#AdminLogo',
+      },
+      views: {
+        dashboard: {
+          Component: '@/components/payload/CustomDashboard#CustomDashboard',
+        },
+      },
+    },
   },
   collections: [
     {
@@ -39,6 +55,27 @@ export default buildConfig({
   globals: [
     {
       slug: 'home-page',
+      admin: {
+        description: 'Construye la página, reordena secciones y previsualiza los cambios en tiempo real.',
+        livePreview: {
+          openByDefault: true,
+          url: '/',
+        },
+      },
+      hooks: {
+        afterRead: [({ doc }) => {
+          const home = doc as typeof doc & { layout?: unknown[] };
+          if (!home.layout?.length) home.layout = createLayoutFromLegacyFields(home as Record<string, unknown>);
+          return home;
+        }],
+      },
+      versions: {
+        drafts: {
+          autosave: {
+            interval: 800,
+          },
+        },
+      },
       fields: [
         {
           type: 'tabs',
@@ -151,7 +188,17 @@ export default buildConfig({
               ]
             }
           ]
-        }
+        },
+        {
+          name: 'layout',
+          label: 'Constructor visual',
+          type: 'blocks',
+          admin: {
+            description: 'Arrastra para reordenar. Cada bloque se puede editar, duplicar, contraer o eliminar.',
+            initCollapsed: true,
+          },
+          blocks: homeBlocks,
+        },
       ]
     }
   ],
