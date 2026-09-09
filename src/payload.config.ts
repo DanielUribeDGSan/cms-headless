@@ -4,6 +4,7 @@ import { lexicalEditor } from '@payloadcms/richtext-lexical';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { createLayoutFromLegacyFields, homeBlocks } from '@/modules/home/infrastructure/home-blocks';
+import { createPuckPlugin } from '@delmaredigital/payload-puck/plugin';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -27,11 +28,27 @@ export default buildConfig({
       },
     },
   },
+  plugins: [
+    createPuckPlugin({
+      pagesCollection: 'pages',
+      editorStylesheets: ['/theme.css'],
+    }),
+  ],
   collections: [
     {
       slug: 'users',
       auth: true,
       fields: [],
+    },
+    {
+      slug: 'media',
+      upload: true,
+      fields: [
+        {
+          name: 'alt',
+          type: 'text',
+        },
+      ],
     },
     {
       slug: 'pages',

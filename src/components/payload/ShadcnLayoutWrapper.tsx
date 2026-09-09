@@ -36,50 +36,57 @@ export const ShadcnLayoutWrapper = ({ children }: { children: React.ReactNode })
     </Link>
   )
 
+  const isPuckEditor = pathname.includes('/puck-editor')
+
   return (
     <div className="cms-shell">
       {mobileOpen && <button className="cms-shell__scrim" aria-label="Cerrar menú" onClick={() => setMobileOpen(false)} />}
-      <aside className={`cms-shell__sidebar${mobileOpen ? ' is-open' : ''}`}>
-        <div className="cms-shell__brand">
-          <span className="cms-shell__brand-icon"><LayoutDashboard size={17} /></span>
-          <span><strong>Company CMS</strong><small>Payload + Shadcn UI</small></span>
-        </div>
-        <nav className="cms-shell__navigation" aria-label="Navegación principal">
-          <p>General</p>
-          {navLink('/admin', 'Dashboard', <LayoutDashboard size={17} />)}
-          <p>Contenido</p>
-          {navLink('/admin/collections/pages', 'Páginas', <FileText size={17} />)}
-          {navLink('/admin/globals/home-page', 'Editar página de inicio', <PanelLeft size={17} />)}
-          <p>Administración</p>
-          {navLink('/admin/collections/users', 'Usuarios', <Users size={17} />)}
-          {navLink('/admin/account', 'Configuración', <Settings size={17} />)}
-        </nav>
-        <Link className="cms-shell__user" href="/admin/account">
-          <span className="cms-shell__avatar">{initials}</span>
-          <span><strong>{user?.email?.split('@')[0] ?? 'Administrador'}</strong><small>{user?.email ?? 'Cuenta del CMS'}</small></span>
-        </Link>
-      </aside>
+      
+      {!isPuckEditor && (
+        <aside className={`cms-shell__sidebar${mobileOpen ? ' is-open' : ''}`}>
+          <div className="cms-shell__brand">
+            <span className="cms-shell__brand-icon"><LayoutDashboard size={17} /></span>
+            <span><strong>Company CMS</strong><small>Payload + Shadcn UI</small></span>
+          </div>
+          <nav className="cms-shell__navigation" aria-label="Navegación principal">
+            <p>General</p>
+            {navLink('/admin', 'Dashboard', <LayoutDashboard size={17} />)}
+            <p>Contenido</p>
+            {navLink('/admin/collections/pages', 'Páginas', <FileText size={17} />)}
+            {navLink('/admin/globals/home-page', 'Editar página de inicio', <PanelLeft size={17} />)}
+            <p>Administración</p>
+            {navLink('/admin/collections/users', 'Usuarios', <Users size={17} />)}
+            {navLink('/admin/account', 'Configuración', <Settings size={17} />)}
+          </nav>
+          <Link className="cms-shell__user" href="/admin/account">
+            <span className="cms-shell__avatar">{initials}</span>
+            <span><strong>{user?.email?.split('@')[0] ?? 'Administrador'}</strong><small>{user?.email ?? 'Cuenta del CMS'}</small></span>
+          </Link>
+        </aside>
+      )}
 
-      <section className="cms-shell__workspace">
-        <header className="cms-shell__header">
-          <div className="cms-shell__header-nav">
-            <button className="cms-shell__icon-button cms-shell__menu" aria-label="Abrir menú" onClick={() => setMobileOpen(true)}><Menu size={19} /></button>
-            <span className="cms-shell__divider" />
-            <Link className={isActive('/admin') ? 'is-active' : ''} href="/admin">Overview</Link>
-            <Link href="/admin/collections/pages">Contenido</Link>
-            <Link href="/admin/collections/users">Usuarios</Link>
-            <Link href="/admin/account">Settings</Link>
-          </div>
-          <div className="cms-shell__tools">
-            <label className="cms-shell__search"><Search size={16} /><input aria-label="Buscar en el CMS" placeholder="Search" /><kbd>⌘ K</kbd></label>
-            <button className="cms-shell__icon-button" aria-label="Cambiar tema" onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>{theme === 'light' ? <Sun size={18} /> : <Moon size={18} />}</button>
-            <div className="cms-shell__palette-wrap">
-              <button className="cms-shell__icon-button" aria-label="Cambiar color" onClick={() => setPaletteOpen(!paletteOpen)}><Palette size={18} /></button>
-              {paletteOpen && <div className="cms-shell__palette">{colors.map(color => <button key={color} aria-label={`Color ${color}`} className={accent === color ? 'is-active' : ''} style={{ background: color }} onClick={() => { setAccent(color); setPaletteOpen(false) }} />)}</div>}
+      <section className={`cms-shell__workspace${isPuckEditor ? ' is-puck-editor' : ''}`}>
+        {!isPuckEditor && (
+          <header className="cms-shell__header">
+            <div className="cms-shell__header-nav">
+              <button className="cms-shell__icon-button cms-shell__menu" aria-label="Abrir menú" onClick={() => setMobileOpen(true)}><Menu size={19} /></button>
+              <span className="cms-shell__divider" />
+              <Link className={isActive('/admin') ? 'is-active' : ''} href="/admin">Overview</Link>
+              <Link href="/admin/collections/pages">Contenido</Link>
+              <Link href="/admin/collections/users">Usuarios</Link>
+              <Link href="/admin/account">Settings</Link>
             </div>
-            <Link className="cms-shell__avatar" href="/admin/account">{initials}</Link>
-          </div>
-        </header>
+            <div className="cms-shell__tools">
+              <label className="cms-shell__search"><Search size={16} /><input aria-label="Buscar en el CMS" placeholder="Search" /><kbd>⌘ K</kbd></label>
+              <button className="cms-shell__icon-button" aria-label="Cambiar tema" onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>{theme === 'light' ? <Sun size={18} /> : <Moon size={18} />}</button>
+              <div className="cms-shell__palette-wrap">
+                <button className="cms-shell__icon-button" aria-label="Cambiar color" onClick={() => setPaletteOpen(!paletteOpen)}><Palette size={18} /></button>
+                {paletteOpen && <div className="cms-shell__palette">{colors.map(color => <button key={color} aria-label={`Color ${color}`} className={accent === color ? 'is-active' : ''} style={{ background: color }} onClick={() => { setAccent(color); setPaletteOpen(false) }} />)}</div>}
+              </div>
+              <Link className="cms-shell__avatar" href="/admin/account">{initials}</Link>
+            </div>
+          </header>
+        )}
         <main className="cms-shell__content">{children}</main>
       </section>
     </div>

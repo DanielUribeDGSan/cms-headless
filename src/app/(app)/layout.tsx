@@ -13,6 +13,8 @@ export const metadata: Metadata = {
   description: "Tu dinero, en movimiento contigo. Una cuenta digital para pagar, organizar y avanzar hacia tus planes desde una sola app.",
 };
 
+import { ClientPuckProvider } from '@/providers/ClientPuckProvider';
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -23,7 +25,9 @@ export default function RootLayout({
   return (
     <html lang="es">
       <ThemeLayout>
-        {children}
+        <ClientPuckProvider>
+          {children}
+        </ClientPuckProvider>
       </ThemeLayout>
     </html>
   );

@@ -1,4 +1,10 @@
 @import "tailwindcss";
+@import "../themes/legacy-elementor/styles/frontend.min.css";
+@import "../themes/legacy-elementor/styles/post-4.css";
+@import "../themes/legacy-elementor/styles/post-17.css";
+@import "../themes/legacy-elementor/styles/base-desktop.css";
+@import "../themes/legacy-elementor/styles/base-mobile.css";
+@import "../themes/legacy-elementor/styles/bradesco-main.css";
 
 @theme inline {
   --color-primary: #CC092F;

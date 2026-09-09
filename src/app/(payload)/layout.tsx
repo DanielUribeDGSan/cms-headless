@@ -6,6 +6,7 @@ import { handleServerFunctions, RootLayout } from '@payloadcms/next/layouts'
 import React from 'react'
 import { importMap } from './admin/importMap.js'
 import { ShadcnLayoutWrapper } from '@/components/payload/ShadcnLayoutWrapper'
+import { ClientPuckProvider } from '@/providers/ClientPuckProvider'
 
 type Args = {
   children: React.ReactNode
@@ -26,7 +27,9 @@ const Layout = ({ children }: Args) => (
     importMap={importMap} 
     serverFunction={serverFunction}
   >
-    <ShadcnLayoutWrapper>{children}</ShadcnLayoutWrapper>
+    <ClientPuckProvider>
+      <ShadcnLayoutWrapper>{children}</ShadcnLayoutWrapper>
+    </ClientPuckProvider>
   </RootLayout>
 )
 

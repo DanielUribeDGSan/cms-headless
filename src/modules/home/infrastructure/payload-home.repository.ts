@@ -12,6 +12,13 @@ export class PayloadHomeRepository implements IHomeRepository {
         slug: 'home-page',
       });
 
+      // Try to fetch the visual builder page
+      const pages = await payload.find({
+        collection: 'pages',
+        where: { slug: { equals: 'home' } },
+      });
+      const visualPage = pages.docs[0];
+
       const data: HomeEntity = {
         hero: {
           kicker: homeGlobal.heroKicker as string || '',
@@ -80,7 +87,7 @@ export class PayloadHomeRepository implements IHomeRepository {
         }
       };
 
-      const rawLayout = (homeGlobal as unknown as { layout?: Record<string, unknown>[] }).layout;
+      const rawLayout = (visualPage as unknown as { layout?: Record<string, unknown>[] })?.layout || (homeGlobal as unknown as { layout?: Record<string, unknown>[] }).layout;
       if (rawLayout?.length) data.layout = rawLayout.map(this.mapLayoutBlock).filter((block): block is HomeLayoutBlock => block !== null);
       return data;
     } catch (error) {
