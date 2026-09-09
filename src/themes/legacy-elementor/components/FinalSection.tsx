@@ -1,0 +1,7 @@
+import React from 'react';
+
+export const FinalSection = () => {
+  return (
+    <section className="fg-final" id="solicita"><div className="fg-final-phone"><img decoding="async" className="fg-final-device" src="/assets/images/figma-hero-phone.png" alt="Aplicación Bradesco" /><div className="fg-final-qr"><img decoding="async" src="/assets/images/QR.svg" alt="Código QR para descargar la aplicación" /><div><strong>Escanea para descargar</strong><small>Abre la tienda desde tu celular</small></div></div></div><div className="fg-final-copy"><p className="fg-kicker light">Bradesco en tu celular</p><h2>Una nueva forma<br />de acompañar tu<br />dinero.</h2><p>Descarga la app para administrar tu cuenta y mantener el control desde donde estés.</p><div className="fg-stores" aria-label="Descargar la aplicación"><a href="https://apps.apple.com/mx/" target="_blank" rel="noopener noreferrer"><img decoding="async" src="/assets/images/stores/app-store.png" alt="Descargar en App Store" /></a><a href="https://play.google.com/store/apps" target="_blank" rel="noopener noreferrer"><img decoding="async" src="/assets/images/stores/google-play.png" alt="Disponible en Google Play" /></a></div><p className="fg-legal">Los enlaces dirigen a las tiendas oficiales. La disponibilidad y compatibilidad de la aplicación están sujetas al lanzamiento y a los requisitos de cada dispositivo.</p></div></section>
+  );
+};
