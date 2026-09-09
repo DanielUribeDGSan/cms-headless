@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { useAuth, useTheme } from '@payloadcms/ui'
+import { ClientPuckProvider } from '@/providers/ClientPuckProvider'
 
 const colors = ['#0f172a', '#2563eb', '#7c3aed', '#e11d48']
 
@@ -36,7 +37,7 @@ export const ShadcnLayoutWrapper = ({ children }: { children: React.ReactNode })
     </Link>
   )
 
-  const isPuckEditor = pathname.includes('/puck-editor')
+  const isPuckEditor = pathname?.includes('/puck-editor') || false
 
   return (
     <div className="cms-shell">
@@ -87,7 +88,13 @@ export const ShadcnLayoutWrapper = ({ children }: { children: React.ReactNode })
             </div>
           </header>
         )}
-        <main className="cms-shell__content">{children}</main>
+        <main className="cms-shell__content">
+          {isPuckEditor ? (
+            <ClientPuckProvider>{children}</ClientPuckProvider>
+          ) : (
+            children
+          )}
+        </main>
       </section>
     </div>
   )
