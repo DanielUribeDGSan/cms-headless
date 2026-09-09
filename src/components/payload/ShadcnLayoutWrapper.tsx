@@ -27,9 +27,9 @@ export const ShadcnLayoutWrapper = ({ children }: { children: React.ReactNode })
     window.localStorage.setItem('cms-accent', accent)
   }, [accent])
 
-  if (/\/(login|forgot|reset|create-first-user)/.test(pathname)) return children
+  if (pathname && /\/(login|forgot|reset|create-first-user)/.test(pathname)) return children
 
-  const isActive = (href: string) => href === '/admin' ? pathname === href : pathname.startsWith(href)
+  const isActive = (href: string) => href === '/admin' ? pathname === href : pathname?.startsWith(href) || false
   const initials = user?.email?.slice(0, 2).toUpperCase() ?? 'CM'
   const navLink = (href: string, label: string, icon: React.ReactNode) => (
     <Link className={`cms-shell__nav-link${isActive(href) ? ' is-active' : ''}`} href={href} onClick={() => setMobileOpen(false)}>
