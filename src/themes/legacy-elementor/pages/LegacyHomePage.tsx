@@ -48,11 +48,18 @@ export const LegacyHomePage = ({ data }: LegacyHomePageProps) => {
         <div data-elementor-type="wp-page" data-elementor-id="17" className="elementor elementor-17">
           <div className="elementor-element elementor-element-040086b5 e-con-full bradesco-elementor-root e-flex e-con e-parent" data-id="040086b5" data-element_type="container" data-e-type="container">
             
-            {layout.filter(block => block.blockType !== 'footer').map((block, index) => (
-              <div key={block.id ?? `${block.blockType}-${index}`} className={`bradesco-section-widget bradesco-section-${index + 1}`}>
-                <div className="elementor-widget-container">{renderBlock(block, index)}</div>
-              </div>
-            ))}
+            {layout.map((block, index) => {
+              if (block.blockType === 'footer') return null;
+              return (
+                <div 
+                  key={block.id ?? `${block.blockType}-${index}`} 
+                  className={`bradesco-section-widget bradesco-section-${index + 1}`}
+                  data-payload-path={`layout.${index}`}
+                >
+                  <div className="elementor-widget-container">{renderBlock(block, index)}</div>
+                </div>
+              );
+            })}
 
             <div className="elementor-element elementor-element-eafb48da bradesco-section-widget bradesco-section-10 elementor-widget elementor-widget-bradesco-editable-section">
               <div className="elementor-widget-container">
@@ -63,7 +70,14 @@ export const LegacyHomePage = ({ data }: LegacyHomePageProps) => {
           </div>
         </div>
       </main>
-      {layout.filter(block => block.blockType === 'footer').map(renderBlock)}
+      {layout.map((block, index) => {
+        if (block.blockType !== 'footer') return null;
+        return (
+          <div key={block.id ?? `${block.blockType}-${index}`} data-payload-path={`layout.${index}`}>
+            {renderBlock(block, index)}
+          </div>
+        );
+      })}
     </>
   );
 };

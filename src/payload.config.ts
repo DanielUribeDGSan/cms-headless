@@ -60,6 +60,11 @@ export default buildConfig({
         livePreview: {
           openByDefault: true,
           url: '/',
+          breakpoints: [
+            { label: 'Mobile', name: 'mobile', width: 375, height: 667 },
+            { label: 'iPad / Tablet', name: 'tablet', width: 768, height: 1024 },
+            { label: 'Web / Desktop', name: 'desktop', width: 1440, height: 900 },
+          ],
         },
       },
       hooks: {

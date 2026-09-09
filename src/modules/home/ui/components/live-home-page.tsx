@@ -26,8 +26,11 @@ const mapBlock = (block: RawBlock): HomeLayoutBlock | null => {
   }
 }
 
-export const LiveHomePage = ({ initialData, serverURL, View }: { initialData: HomeEntity; serverURL: string; View: React.ComponentType<{ data: HomeEntity }> }) => {
+import { getThemeConfig } from '@/themes'
+
+export const LiveHomePage = ({ initialData, serverURL }: { initialData: HomeEntity; serverURL: string }) => {
   const { data } = useLivePreview<Record<string, unknown>>({ initialData: {}, serverURL, depth: 2 })
   const liveLayout = Array.isArray(data.layout) ? data.layout.map(block => mapBlock(block as RawBlock)).filter((block): block is HomeLayoutBlock => block !== null) : undefined
+  const View = getThemeConfig().HomePage;
   return <View data={liveLayout ? { ...initialData, layout: liveLayout } : initialData} />
 }
