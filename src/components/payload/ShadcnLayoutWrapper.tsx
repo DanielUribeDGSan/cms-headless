@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { useAuth, useTheme } from '@payloadcms/ui'
-import { ClientPuckProvider } from '@/providers/ClientPuckProvider'
+import { PuckEditorSkeleton } from '@/components/payload/PuckEditorSkeleton'
 
 const colors = ['#0f172a', '#2563eb', '#7c3aed', '#e11d48']
 
@@ -89,11 +89,8 @@ export const ShadcnLayoutWrapper = ({ children }: { children: React.ReactNode })
           </header>
         )}
         <main className="cms-shell__content">
-          {isPuckEditor ? (
-            <ClientPuckProvider>{children}</ClientPuckProvider>
-          ) : (
-            children
-          )}
+          {isPuckEditor && <PuckEditorSkeleton />}
+          {children}
         </main>
       </section>
     </div>

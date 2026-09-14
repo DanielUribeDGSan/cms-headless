@@ -1,8 +1,7 @@
-import { Render } from "@puckeditor/core";
 import { getPayload } from "payload";
 import configPromise from "@/payload.config";
-import { puckConfig } from "@/puck.config";
 import { notFound } from "next/navigation";
+import { PuckPageRender } from "@/components/payload/PuckPageRender";
 
 export default async function Page({ params }: { params: Promise<{ slug: string[] }> }) {
   const { slug } = await params;
@@ -15,10 +14,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
   });
 
   const page = pages.docs[0];
-  if (!page || !page.puck) return notFound();
+  if (!page || !page.puckData) return notFound();
 
-  // The puck plugin stores the JSON data in a field named 'puck'
-  const puckData = typeof page.puck === 'string' ? JSON.parse(page.puck) : page.puck;
-
-  return <Render config={puckConfig as any} data={puckData} />;
+  return <PuckPageRender data={page.puckData} />;
 }

@@ -1,32 +1,12 @@
 import { getPayload } from 'payload';
 import configPromise from './src/payload.config';
+import { defaultHomeData } from './src/modules/home/domain/home.defaults';
+import { createHomePuckData, isCurrentHomePuckData } from './src/modules/home/infrastructure/home-puck-data';
 
 async function migrate() {
   const payload = await getPayload({ config: configPromise });
   
-  console.log('Fetching home-page global...');
-  const homeGlobal = await payload.findGlobal({ slug: 'home-page' });
-  
-  const puckData = {
-    content: [
-      {
-        type: "HeroBlock",
-        props: {
-          kicker: homeGlobal.heroKicker || "Bradesco llega a México",
-          title: homeGlobal.heroTitle || "Tu dinero, en movimiento contigo.",
-          lead: homeGlobal.heroLead || "Una cuenta digital para pagar, organizar y avanzar hacia tus planes desde una sola app.",
-          legal: homeGlobal.heroLegal || "La información mostrada es ilustrativa.",
-          primaryButtonText: homeGlobal.primaryButtonText || "Conoce la cuenta",
-          primaryButtonUrl: homeGlobal.primaryButtonUrl || "#cuenta",
-          secondaryButtonText: homeGlobal.secondaryButtonText || "Descubre Bradesco",
-          secondaryButtonUrl: homeGlobal.secondaryButtonUrl || "#nosotros",
-          id: "HeroBlock-1"
-        }
-      }
-    ],
-    root: {},
-    zones: {}
-  };
+  const puckData = createHomePuckData(defaultHomeData);
 
   console.log('Creating Home page in pages collection...');
   try {
@@ -36,16 +16,24 @@ async function migrate() {
     });
 
     if (existing.docs.length > 0) {
-      console.log('Updating existing home page...');
-      await payload.update({
-        collection: 'pages',
-        id: existing.docs[0].id,
-        data: {
-          title: 'Inicio',
-          slug: 'home',
-          puck: JSON.stringify(puckData)
-        }
-      });
+      const home = existing.docs[0];
+      if (isCurrentHomePuckData(home.puckData)) {
+        console.log('Home page already has the current template; leaving it unchanged.');
+      } else {
+        console.log('Repairing the existing home page with the current template...');
+        await payload.update({
+          collection: 'pages',
+          id: home.id,
+          data: {
+            title: 'Inicio',
+            slug: 'home',
+            puckData,
+            editorVersion: 'puck',
+            isHomepage: true,
+            _status: 'published',
+          },
+        });
+      }
     } else {
       console.log('Creating new home page...');
       await payload.create({
@@ -53,7 +41,10 @@ async function migrate() {
         data: {
           title: 'Inicio',
           slug: 'home',
-          puck: JSON.stringify(puckData)
+          puckData,
+          editorVersion: 'puck',
+          isHomepage: true,
+          _status: 'published',
         }
       });
     }

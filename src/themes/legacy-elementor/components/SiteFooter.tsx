@@ -1,8 +1,10 @@
-import React from 'react';
-import { HomeEntity } from "@/modules/home/domain/home.entity";
+import React from 'react'
 
 interface SiteFooterProps {
-  data: HomeEntity['footer'];
+  data: {
+    copyright?: React.ReactNode
+    links?: Array<{ label?: React.ReactNode; url: string }>
+  }
 }
 
 export const SiteFooter = ({ data }: SiteFooterProps) => {

@@ -80,14 +80,19 @@ export default buildConfig({
           breakpoints: [
             { label: 'Mobile', name: 'mobile', width: 375, height: 667 },
             { label: 'iPad / Tablet', name: 'tablet', width: 768, height: 1024 },
-            { label: 'Web / Desktop', name: 'desktop', width: 1440, height: 900 },
+            { label: 'Web / Desktop', name: 'desktop', width: 1440, height: '100%' as any },
           ],
         },
       },
       hooks: {
         afterRead: [({ doc }) => {
           const home = doc as typeof doc & { layout?: unknown[] };
-          if (!home.layout?.length) home.layout = createLayoutFromLegacyFields(home as Record<string, unknown>);
+          if (!home.layout?.length) {
+            home.layout = createLayoutFromLegacyFields(home as Record<string, unknown>).map(block => ({
+              ...block,
+              id: crypto.randomUUID()
+            }));
+          }
           return home;
         }],
       },
@@ -123,6 +128,11 @@ export default buildConfig({
                 {
                   name: 'expFeatures',
                   type: 'array',
+                  admin: {
+                    components: {
+                      RowLabel: '@/components/payload/CustomArrayRowLabel#CustomArrayRowLabel'
+                    }
+                  },
                   fields: [
                     { name: 'title', type: 'text', required: true },
                     { name: 'description', type: 'textarea', required: true },
@@ -145,6 +155,11 @@ export default buildConfig({
                 {
                   name: 'stepsList',
                   type: 'array',
+                  admin: {
+                    components: {
+                      RowLabel: '@/components/payload/CustomArrayRowLabel#CustomArrayRowLabel'
+                    }
+                  },
                   fields: [
                     { name: 'title', type: 'text', required: true },
                     { name: 'description', type: 'textarea', required: true },
@@ -188,6 +203,11 @@ export default buildConfig({
                 {
                   name: 'faqList',
                   type: 'array',
+                  admin: {
+                    components: {
+                      RowLabel: '@/components/payload/CustomArrayRowLabel#CustomArrayRowLabel'
+                    }
+                  },
                   fields: [
                     { name: 'question', type: 'text', required: true },
                     { name: 'answer', type: 'textarea', required: true },
@@ -202,6 +222,11 @@ export default buildConfig({
                 {
                   name: 'footerLinks',
                   type: 'array',
+                  admin: {
+                    components: {
+                      RowLabel: '@/components/payload/CustomArrayRowLabel#CustomArrayRowLabel'
+                    }
+                  },
                   fields: [
                     { name: 'label', type: 'text', required: true },
                     { name: 'url', type: 'text', required: true },
@@ -230,6 +255,7 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URI || 'postgres://postgres:postgres@localhost:5432/bradesco_payload',
     },
+    push: process.env.NODE_ENV !== 'production',
   }),
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),

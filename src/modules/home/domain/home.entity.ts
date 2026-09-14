@@ -22,10 +22,13 @@ export interface HomeEntity {
       description: string;
       icon: string;
     }>;
+    reverseScenes?: boolean;
+    reverseDownload?: boolean;
   };
   account: {
     title: string;
     lead: string;
+    reverseLayout?: boolean;
   };
   steps: {
     title: string;
@@ -38,6 +41,7 @@ export interface HomeEntity {
     title: string;
     lead: string;
     button: string;
+    reverseLayout?: boolean;
   };
   security: {
     title: string;
@@ -50,6 +54,7 @@ export interface HomeEntity {
   newsletter: {
     title: string;
     lead: string;
+    reverseLayout?: boolean;
   };
   faq: {
     title: string;

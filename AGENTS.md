@@ -11,3 +11,6 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 # Architecture Guidelines
 Always read `ARCHITECTURE.md` before making structural changes or creating new UI components.
+
+# Payload/Puck page templates
+Before creating, restoring, migrating, or repairing a document in the Payload `pages` collection, read `CMS_PAGE_TEMPLATES.md`. It documents the canonical template shape, safe idempotent recovery flow, Puck slot requirements, and verification checklist.

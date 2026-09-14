@@ -1,8 +1,7 @@
-import React from 'react';
-import { HomeEntity } from "@/modules/home/domain/home.entity";
+import React from 'react'
 
 interface SecuritySectionProps {
-  data: HomeEntity['security'];
+  data: { title?: React.ReactNode; lead?: React.ReactNode }
 }
 
 export const SecuritySection = ({ data }: SecuritySectionProps) => {

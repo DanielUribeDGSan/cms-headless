@@ -87,7 +87,11 @@ export class PayloadHomeRepository implements IHomeRepository {
         }
       };
 
-      const rawLayout = (visualPage as unknown as { layout?: Record<string, unknown>[] })?.layout || (homeGlobal as unknown as { layout?: Record<string, unknown>[] }).layout;
+      const puckContent = (visualPage as unknown as { puckData?: { content?: Array<{ type?: string; props?: Record<string, unknown> }> } })?.puckData?.content;
+      const rawLayout = puckContent?.map(({ type, props = {} }) => ({
+        ...props,
+        blockType: this.puckTypeToBlockType(type),
+      })) || (homeGlobal as unknown as { layout?: Record<string, unknown>[] }).layout;
       if (rawLayout?.length) data.layout = rawLayout.map(this.mapLayoutBlock).filter((block): block is HomeLayoutBlock => block !== null);
       return data;
     } catch (error) {
@@ -97,15 +101,36 @@ export class PayloadHomeRepository implements IHomeRepository {
     }
   }
 
+  private puckTypeToBlockType = (type?: string): string | undefined => ({
+    HeroBlock: 'hero',
+    ExperienceBlock: 'experience',
+    AccountBlock: 'account',
+    StepsBlock: 'steps',
+    PromoBlock: 'promo',
+    SecurityBlock: 'security',
+    LearnBlock: 'learn',
+    NewsletterBlock: 'newsletter',
+    FaqBlock: 'faq',
+    FooterBlock: 'footer',
+  })[type ?? '']
+
   private mapLayoutBlock = (block: Record<string, unknown>): HomeLayoutBlock | null => {
     const text = (key: string) => typeof block[key] === 'string' ? block[key] : '';
     const id = text('id') || undefined;
     const items = (key: string) => Array.isArray(block[key]) ? block[key] as Record<string, unknown>[] : [];
+    /** Soporta arrays planos o slots Puck ({ type, props }) */
+    const slotOrArray = (key: string) =>
+      items(key).map((item) => {
+        if (item && typeof item === 'object' && 'props' in item && item.props && typeof item.props === 'object') {
+          return item.props as Record<string, unknown>
+        }
+        return item
+      })
     switch (block.blockType) {
       case 'hero': return { id, blockType: 'hero', data: { kicker: text('kicker'), title: text('title'), lead: text('lead'), legal: text('legal'), primaryButton: { text: text('primaryButtonText'), url: text('primaryButtonUrl') }, secondaryButton: { text: text('secondaryButtonText'), url: text('secondaryButtonUrl') } } };
-      case 'experience': return { id, blockType: 'experience', data: { title: text('title'), lead: text('lead'), features: items('features').map(item => ({ title: String(item.title ?? ''), description: String(item.description ?? ''), icon: String(item.icon ?? '') })) } };
+      case 'experience': return { id, blockType: 'experience', data: { title: text('title'), lead: text('lead'), features: slotOrArray('features').map(item => ({ title: String(item.title ?? ''), description: String(item.description ?? ''), icon: String(item.icon ?? '') })) } };
       case 'account': return { id, blockType: 'account', data: { title: text('title'), lead: text('lead') } };
-      case 'steps': return { id, blockType: 'steps', data: { title: text('title'), list: items('list').map(item => ({ title: String(item.title ?? ''), description: String(item.description ?? '') })) } };
+      case 'steps': return { id, blockType: 'steps', data: { title: text('title'), list: (slotOrArray('steps').length ? slotOrArray('steps') : slotOrArray('list')).map(item => ({ title: String(item.title ?? ''), description: String(item.description ?? '') })) } };
       case 'promo': return { id, blockType: 'promo', data: { title: text('title'), lead: text('lead'), button: text('button') } };
       case 'security': return { id, blockType: 'security', data: { title: text('title'), lead: text('lead') } };
       case 'learn': return { id, blockType: 'learn', data: { title: text('title'), lead: text('lead') } };

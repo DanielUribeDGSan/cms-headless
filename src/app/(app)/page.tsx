@@ -1,4 +1,3 @@
-import { getThemeConfig } from "@/themes";
 import { getHomeDataUseCase } from "@/modules/home/application/get-home-data.usecase";
 import { LiveHomePage } from "@/modules/home/ui/components/live-home-page";
 import { headers } from "next/headers";

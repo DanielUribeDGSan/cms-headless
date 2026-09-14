@@ -2958,35 +2958,35 @@ h1.entry-title {
 }
 @font-face {
   font-family: "Bradesco Sans";
-  src: url("../fonts/bradesco-sans/BradescoSans-Regular.woff2") format("woff2");
+  src: url("../assets/fonts/bradesco-sans/BradescoSans-Regular.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: "Bradesco Sans";
-  src: url("../fonts/bradesco-sans/BradescoSans-Medium.woff2") format("woff2");
+  src: url("../assets/fonts/bradesco-sans/BradescoSans-Medium.woff2") format("woff2");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: "Bradesco Sans";
-  src: url("../fonts/bradesco-sans/BradescoSans-SemiBold.woff2") format("woff2");
+  src: url("../assets/fonts/bradesco-sans/BradescoSans-SemiBold.woff2") format("woff2");
   font-weight: 600;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: "Bradesco Sans";
-  src: url("../fonts/bradesco-sans/BradescoSans-Bold.woff2") format("woff2");
+  src: url("../assets/fonts/bradesco-sans/BradescoSans-Bold.woff2") format("woff2");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: "Material Symbols Rounded";
-  src: url("../fonts/material-symbols/MaterialSymbolsRounded-subset.woff2") format("woff2");
+  src: url("../assets/fonts/material-symbols/MaterialSymbolsRounded-subset.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: block;
@@ -8380,3 +8380,7 @@ form[data-element_type="e-form"].form-state-success [data-element_type="e-form-s
     }
   }
 }
+
+.fg-download.is-reversed{flex-direction:row-reverse}
+.fg-scenes.is-reversed .fg-scene.pale{order:2}
+.fg-scenes.is-reversed .fg-scene.dark{order:1}

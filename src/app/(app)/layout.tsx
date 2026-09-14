@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "../globals.css";
+import "@/themes/legacy-elementor/styles/wp-elementor-globals.css";
 import { getThemeConfig } from "@/themes";
+import { ClientPuckProvider } from '@/providers/ClientPuckProvider';
 
 const inter = Inter({
   variable: "--font-inter",
@@ -13,8 +15,6 @@ export const metadata: Metadata = {
   description: "Tu dinero, en movimiento contigo. Una cuenta digital para pagar, organizar y avanzar hacia tus planes desde una sola app.",
 };
 
-import { ClientPuckProvider } from '@/providers/ClientPuckProvider';
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -23,7 +23,7 @@ export default function RootLayout({
   const ThemeLayout = getThemeConfig().RootLayout;
 
   return (
-    <html lang="es">
+    <html lang="es" className={inter.variable}>
       <ThemeLayout>
         <ClientPuckProvider>
           {children}

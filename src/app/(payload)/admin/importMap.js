@@ -1,5 +1,6 @@
 import { EditWithPuckButton as EditWithPuckButton_d72027e0f0541e23dd1e340e47e71267 } from '@delmaredigital/payload-puck/admin/client'
 import { EditWithPuckCell as EditWithPuckCell_d72027e0f0541e23dd1e340e47e71267 } from '@delmaredigital/payload-puck/admin/client'
+import { CustomArrayRowLabel as CustomArrayRowLabel_d485a234471d32edc440b77413a9e45a } from '@/components/payload/CustomArrayRowLabel'
 import { AdminIcon as AdminIcon_203ddc38a4b7f49109875ad5c9fc604f } from '@/components/payload/AdminBrand'
 import { AdminLogo as AdminLogo_203ddc38a4b7f49109875ad5c9fc604f } from '@/components/payload/AdminBrand'
 import { AdminBrand as AdminBrand_203ddc38a4b7f49109875ad5c9fc604f } from '@/components/payload/AdminBrand'
@@ -11,6 +12,7 @@ import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } f
 export const importMap = {
   "@delmaredigital/payload-puck/admin/client#EditWithPuckButton": EditWithPuckButton_d72027e0f0541e23dd1e340e47e71267,
   "@delmaredigital/payload-puck/admin/client#EditWithPuckCell": EditWithPuckCell_d72027e0f0541e23dd1e340e47e71267,
+  "@/components/payload/CustomArrayRowLabel#CustomArrayRowLabel": CustomArrayRowLabel_d485a234471d32edc440b77413a9e45a,
   "@/components/payload/AdminBrand#AdminIcon": AdminIcon_203ddc38a4b7f49109875ad5c9fc604f,
   "@/components/payload/AdminBrand#AdminLogo": AdminLogo_203ddc38a4b7f49109875ad5c9fc604f,
   "@/components/payload/AdminBrand#AdminBrand": AdminBrand_203ddc38a4b7f49109875ad5c9fc604f,

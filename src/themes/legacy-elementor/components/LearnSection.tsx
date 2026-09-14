@@ -1,8 +1,7 @@
-import React from 'react';
-import { HomeEntity } from "@/modules/home/domain/home.entity";
+import React from 'react'
 
 interface LearnSectionProps {
-  data: HomeEntity['learn'];
+  data: { title?: React.ReactNode; lead?: React.ReactNode }
 }
 
 export const LearnSection = ({ data }: LearnSectionProps) => {
